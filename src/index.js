@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-ReactDOM.render(
-  <h1>Привет, мир!</h1>,
-  document.getElementById('root')
-);
+import Main from '../src/components/Main/VMain';
+
+ReactDOM.render(<Main />, document.getElementById('root'));

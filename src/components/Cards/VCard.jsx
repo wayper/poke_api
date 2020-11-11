@@ -22,13 +22,14 @@ const useStyles = makeStyles((theme) => ({
   },
   cardMedia: {
     paddingTop: '56.25%', // 16:9
+    backgroundSize: 'auto',
   },
   cardContent: {
     flexGrow: 1,
   },
 }));
 
-export default function VCard({ image }) {
+export default function VCard({ heading, image, title }) {
   const classes = useStyles();
 
   return (
@@ -37,22 +38,16 @@ export default function VCard({ image }) {
         <CardMedia
           className={classes.cardMedia}
           image={image}
-          title="Image title"
+          title={title}
         />
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h5" component="h2">
-            Heading
-          </Typography>
-          <Typography>
-            This is a media card. You can use this section to describe the content.
+            {heading}
           </Typography>
         </CardContent>
         <CardActions>
           <Button size="small" color="primary">
-            View
-          </Button>
-          <Button size="small" color="primary">
-            Edit
+            Details
           </Button>
         </CardActions>
       </Card>
@@ -61,8 +56,12 @@ export default function VCard({ image }) {
 }
 
 VCard.propTypes = {
+  heading: PropTypes.string,
   image: PropTypes.string,
+  title: PropTypes.string,
 }
 VCard.defaultProps = {
+  heading: '',
   image: '',
+  title: '',
 }

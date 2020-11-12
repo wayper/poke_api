@@ -2,6 +2,7 @@ import React from 'react';
 import { observer } from "mobx-react-lite"
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { makeStyles } from '@material-ui/core/styles';
 
 import VCard from './VCard';
@@ -9,9 +10,14 @@ import VCard from './VCard';
 import { useStores } from '../../store';
 
 const useStyles = makeStyles((theme) => ({
+  loaderWrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
   },
   card: {
     height: '100%',
@@ -21,28 +27,43 @@ const useStyles = makeStyles((theme) => ({
   cardMedia: {
     paddingTop: '56.25%', // 16:9
   },
-  cardContent: {
-    flexGrow: 1,
-  },
 }));
 
 function VCardList() {
-  const { pokemons } = useStores();
+  const { pokemons: { results, isLoading } } = useStores();
 
   const classes = useStyles();
 
   return (
     <Container className={classes.cardGrid} maxWidth="md">
-      <Grid container spacing={4}>
-        {pokemons.results.map(({ name, url }) => (
-          <VCard
-            key={url}
-            image={`https://img.pokemondb.net/sprites/home/normal/${name}.png`}
-            title={name}
-            heading={name}
-          />
-        ))}
-      </Grid>
+        {(
+          isLoading
+            ? <Loader />
+            : <Grid container spacing={4}>
+                {
+                  results.map(({ name, url, types }) => (
+                    <VCard
+                      key={url}
+                      url={url}
+                      types={types}
+                      image={`https://img.pokemondb.net/sprites/home/normal/${name}.png`}
+                      title={name}
+                      heading={name}
+                    />
+                  ))
+                }
+              </Grid>
+        )}
+    </Container>
+  )
+}
+
+function Loader() {
+  const classes = useStyles();
+
+  return (
+    <Container className={classes.loaderWrap}>
+      <CircularProgress/>
     </Container>
   )
 }

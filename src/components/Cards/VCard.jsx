@@ -1,7 +1,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
+import { observer } from "mobx-react-lite"
 import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function VCard({ heading, image, title }) {
+function VCard({ types, heading, image, title }) {
   const classes = useStyles();
 
   return (
@@ -44,6 +46,16 @@ export default function VCard({ heading, image, title }) {
           <Typography gutterBottom variant="h5" component="h2">
             {heading}
           </Typography>
+          {
+            types.map(({ type: { name, url } }) => (
+              <Chip
+                key={url}
+                size="small"
+                label={name}
+                color="primary"
+              />
+            ))
+          }
         </CardContent>
         <CardActions>
           <Button size="small" color="primary">
@@ -56,12 +68,16 @@ export default function VCard({ heading, image, title }) {
 }
 
 VCard.propTypes = {
+  types: PropTypes.arrayOf(PropTypes.object),
   heading: PropTypes.string,
   image: PropTypes.string,
   title: PropTypes.string,
 }
 VCard.defaultProps = {
+  types: [],
   heading: '',
   image: '',
   title: '',
 }
+
+export default observer(VCard);
